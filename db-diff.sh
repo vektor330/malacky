@@ -6,11 +6,7 @@ DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source "${DIR}/config.sh"
 
-function getparam {
-	cat "${DIR}/environments.conf" | grep "${1}.${2}" | cut -d "=" -f 2 | tr -d "[[:space:]]"
-}
-
-function get-schema {
+function getschema {
     local _ENV="${1}"
     local _WORK="${2}"
     local _PG_DUMP="${3}"
@@ -97,8 +93,8 @@ function main {
 
     mkdir -p "${WORK}"
     
-    get-schema "${ENV1}" "${WORK}" "${PG_DUMP}"
-    get-schema "${ENV2}" "${WORK}" "${PG_DUMP}"
+    getschema "${ENV1}" "${WORK}" "${PG_DUMP}"
+    getschema "${ENV2}" "${WORK}" "${PG_DUMP}"
     
     OLD_SQL="${WORK}/${ENV1}.sql"
     NEW_SQL="${WORK}/${ENV2}.sql"
