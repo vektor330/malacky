@@ -12,6 +12,7 @@ function getschema {
     local _PG_DUMP="${3}"
 
     local HOST=`getparam "${_ENV}" "host"`
+    # TODO PORT should actually be called DB_PORT
     local PORT=`getparam "${_ENV}" "port"`
     local LOCAL_PORT=`getparam "${_ENV}" "localport"`
     local USER=`getparam "${_ENV}" "user"`
@@ -80,7 +81,7 @@ function getschema {
 function main {
     if [[ "${#}" != "2" ]]
     then
-	echo "2 parameters expected: environment1 environment 2"
+	echo "2 parameters expected: environment1 environment2"
 	echo "For the purpose of the diff, environment1 is considered the old one, environment2 the new one."
 	exit 1
     fi
