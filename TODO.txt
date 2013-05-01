@@ -4,4 +4,3 @@
   3) try applying the diff.sql to our local test DB
   4) say OK/error
 - Postgres control script
-- Script to upload WAR file (environment, WAR location)

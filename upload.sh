@@ -1,5 +1,6 @@
 #!/bin/bash
-# Controls a Tomcat instance on the specified environment with {start|stop|restart}.
+# Uploads a specified WAR file to the specified environment.
+# TODO add -r --redeploy to redeploy right after uploading
 
 # full path to this script
 DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -9,18 +10,12 @@ source "${DIR}/config.sh"
 function main {
 	if [[ "${#}" != "2" ]]
 	then
-		echo "2 parameters expected: environment {start|stop|restart}"
+		echo "2 parameters expected: environment WARfile"
 		exit 1
 	fi
 	
 	ENV="${1}"
-	COMMAND="${2}"
-	
-	if [[ "${COMMAND}" != "start" && "${COMMAND}" != "stop" && "${COMMAND}" != "restart" ]]
-	then
-		echo "Unknown command: ${COMMAND}"
-		exit 1
-	fi
+	WAR="${2}"
 	
 	LOC=`getparam "${ENV}" "local"`
 	if [[ "${LOC}" == "true" ]] 
@@ -32,7 +27,7 @@ function main {
 	HOST=`getparam "${ENV}" "host"`
 	USER=`getparam "${ENV}" "user"`
 	
-	ssh -t ${USER}@${HOST} "sudo /etc/init.d/tomcat6 ${COMMAND}"
+	scp "${WAR}" ${USER}@${HOST}:~
 }
 
 main "${@}"

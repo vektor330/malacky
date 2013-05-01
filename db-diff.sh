@@ -20,8 +20,9 @@ function getschema {
     local DB_USER=`getparam "${_ENV}" "dbuser"`
     local DB_SCHEMA=`getparam "${_ENV}" "dbschema"`
     local DB_DATABASE=`getparam "${_ENV}" "dbdatabase"`
+    local LOC=`getparam "${_ENV}" "local"`
     
-    if [[ "${HOST}" == "localhost" ]]
+    if [[ "${LOC}" == "true" ]]
     then
     	    # get schema directly
     	    echo -n "Dumping local DB schema..."

@@ -10,9 +10,18 @@ source "${DIR}/config.sh"
 function getcontext {
 	local _ENV="${1}"
 	local _FILE="${2}"
+	
+	LOC=`getparam "${_ENV}" "local"`
+	if [[ "${LOC}" == "true" ]] 
+	then
+		echo "This function does not work on local environment."
+		exit 1
+	fi
+	
 	local HOST=`getparam "${_ENV}" "host"`
 	local USER=`getparam "${_ENV}" "user"`
 	local DNS=`getparam "${_ENV}" "dns"`
+	
 	ssh ${USER}@${HOST} cat /etc/tomcat6/Catalina/${DNS}/context.xml.default > "${_FILE}" 
 }
 
