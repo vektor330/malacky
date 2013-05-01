@@ -1,0 +1,7 @@
+- DB upgrade check (environment, diff.sql location)
+  1) get the full SQL dump from that environment
+  2) apply it to a local test DB
+  3) try applying the diff.sql to our local test DB
+  4) say OK/error
+- Postgres control script
+- Script to upload WAR file (environment, WAR location)
