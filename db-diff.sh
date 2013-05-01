@@ -1,19 +1,20 @@
 #!/bin/bash
-# diffs the 2 specified (old, new) environments
+# Diffs the DB schema of the 2 specified (old, new) environments.
 
 # full path to this script
 DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source "${DIR}/config.sh"
 
+# Takes 3 parameters: environment, working directory and pg_dump path.
+# Saves the DB schema of the specified environment to {work}/{environment}.sql.
 function getschema {
     local _ENV="${1}"
     local _WORK="${2}"
     local _PG_DUMP="${3}"
 
     local HOST=`getparam "${_ENV}" "host"`
-    # TODO PORT should actually be called DB_PORT
-    local PORT=`getparam "${_ENV}" "port"`
+    local DB_PORT=`getparam "${_ENV}" "dbport"`
     local LOCAL_PORT=`getparam "${_ENV}" "localport"`
     local USER=`getparam "${_ENV}" "user"`
     local DB_USER=`getparam "${_ENV}" "dbuser"`
@@ -27,7 +28,7 @@ function getschema {
     	    
     	    "${_PG_DUMP}" \
 	    	--host localhost \
-	    	--port "${PORT}" \
+	    	--port "${DB_PORT}" \
 	    	--username "${DB_USER}" \
 	    	--no-password  \
 	    	--format plain \
@@ -46,7 +47,7 @@ function getschema {
 
     	    # open SSH tunnel
     	    echo -n "Opening SSH tunnel..."
-    	    ssh -fnTN -L ${LOCAL_PORT}:localhost:${PORT} ${USER}@${HOST} &
+    	    ssh -fnTN -L ${LOCAL_PORT}:localhost:${DB_PORT} ${USER}@${HOST} &
     	    sleep 3
     	    echo "done."
     	    
@@ -89,10 +90,10 @@ function main {
     ENV1="${1}"
     ENV2="${2}"
 
+    # TODO move somehow to config
     WORK="${DIR}/work"
-    DIFF="${DIR}/apgdiff/apgdiff-2.3.jar"
-
     mkdir -p "${WORK}"
+    DIFF="${DIR}/apgdiff/apgdiff-2.3.jar"
     
     getschema "${ENV1}" "${WORK}" "${PG_DUMP}"
     getschema "${ENV2}" "${WORK}" "${PG_DUMP}"
