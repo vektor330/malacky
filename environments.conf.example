@@ -1,5 +1,6 @@
 # localhost
 
+localhost.remote = false
 localhost.host = localhost
 localhost.dbport = 5432
 localhost.localport = 15432
@@ -11,6 +12,7 @@ localhost.dns = localhost
 
 # dev
 
+dev.remote = true
 dev.host = ...
 dev.dbport = ...
 dev.localport = ...

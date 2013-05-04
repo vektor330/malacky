@@ -5,6 +5,7 @@
 DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source "${DIR}/config.sh"
+source "${DIR}/utils.sh"
 
 function main {
 	if [[ "${#}" != "2" ]]
@@ -22,8 +23,8 @@ function main {
 		exit 1
 	fi
 	
-	LOC=`getparam "${ENV}" "local"`
-	if [[ "${LOC}" == "true" ]] 
+	REMOTE=`getparam "${ENV}" "remote"`
+	if [[ "${REMOTE}" == "false" ]] 
 	then
 		echo "This command does not work on local environment."
 		exit 1

@@ -5,14 +5,15 @@
 DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source "${DIR}/config.sh"
+source "${DIR}/utils.sh"
 
 # Downloads the context.xml from the specified environment and saves it to the specified file.
 function getcontext {
 	local _ENV="${1}"
 	local _FILE="${2}"
 	
-	LOC=`getparam "${_ENV}" "local"`
-	if [[ "${LOC}" == "true" ]] 
+	REMOTE=`getparam "${_ENV}" "remote"`
+	if [[ "${REMOTE}" == "false" ]] 
 	then
 		echo "This function does not work on local environment."
 		exit 1
