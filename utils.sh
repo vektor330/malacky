@@ -9,7 +9,7 @@ function getparam {
 
 # Takes 1 argument, file name.
 # Removes the BOM (byte order marker) from the specified file.
-function removebom {
+function remove_bom {
 	local _FILE="${1}"
 	if [[ "$(file "${_FILE}")" == *UTF-8\ Unicode\ \(with\ BOM\)* ]]
 	then
@@ -87,8 +87,8 @@ function db_download {
 	local LOCAL_PORT=`getparam "${_ENV}" "localport"`
 	local USER=`getparam "${_ENV}" "user"`
 	local DB_USER=`getparam "${_ENV}" "dbuser"`
-	local DB_SCHEMA=`getparam "${_ENV}" "dbschema"`
 	local DB_DATABASE=`getparam "${_ENV}" "dbdatabase"`
+	local DB_SCHEMA=`getparam "${_ENV}" "dbschema"`
 	local REMOTE=`getparam "${_ENV}" "remote"`
 	
 	if [[ "${REMOTE}" == "false" ]]

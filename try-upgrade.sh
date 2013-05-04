@@ -24,11 +24,35 @@ function main {
 	
 	DUMP="${WORK}/${ENV}-dump.sql"
 	
+	# get the full DB image from the environment
 	db_download_dump "${ENV}" "${DUMP}" "${PG_DUMP}"
+	remove_bom "${DUMP}"
+	sed -i ".bak" "/CREATE SCHEMA/d" "${DUMP}"
+	remove_bom "${DIFF}"
 	
-	# TODO create local test DB
+	FULL_LOG="${WORK}/${ENV}-full.log"
+	DIFF_LOG="${WORK}/${ENV}-diff.log"
 	
-	# TODO try to apply the diff
+	HOST=`getparam "localhost" "host"`
+	PORT=`getparam "localhost" "dbport"`
+	USER=`getparam "localhost" "dbuser"`
+	USER_ADMIN=`getparam "localhost" "admin"`
+	DB=`getparam "localhost" "dbtestdatabase"`
+	SCHEMA=`getparam "localhost" "dbschema"`
+	
+	COMMON="-h ${HOST} -p ${PORT} -d ${DB} --no-password --single-transaction"
+	
+	# delete local test schema
+	${PSQL} ${COMMON} -U ${USER_ADMIN} -c "DROP SCHEMA IF EXISTS ${SCHEMA} CASCADE" &> /dev/null
+
+	# create local test schema
+	${PSQL} ${COMMON} -U ${USER_ADMIN} -c "CREATE SCHEMA ${SCHEMA} AUTHORIZATION ${USER}" &> /dev/null
+
+	# fill local test schema with data
+	${PSQL} ${COMMON} -U ${USER} -e -f ${DUMP} > ${FULL_LOG}
+
+	# try to apply the diff	
+	${PSQL} ${COMMON} -U ${USER} -e -f ${DIFF} > ${DIFF_LOG}
 	
 	# TODO report success / failure
 }

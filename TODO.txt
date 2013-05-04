@@ -1,6 +1,6 @@
-- DB upgrade check (environment, diff.sql location)
-  1) get the full SQL dump from that environment
-  2) apply it to a local test DB
-  3) try applying the diff.sql to our local test DB
-  4) say OK/error
+- try-upgrade:
+  - refactor getting the full dump into a different file - usually, we want to 
+    get the dump once and tune/try diff.sql many times
+  - improve error reporting
 - Postgres control script
+- db-diff: all the talking apart from the diff itself must go into stderr
