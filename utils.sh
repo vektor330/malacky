@@ -1,7 +1,22 @@
 # Takes 2 arguments, environment name and "property key".
 # Returns the value of the property of that environment, from environments.conf.
 function getparam {
-	cat "${DIR}/environments.conf" | grep "${1}.${2}" | cut -d "=" -f 2 | tr -d "[[:space:]]"
+	# TODO DIR needs to be set as argument too!
+	local _ENV="${1}"
+	local _KEY="${2}"
+	cat "${DIR}/environments.conf" | grep "${_ENV}.${_KEY}" | cut -d "=" -f 2 | tr -d "[[:space:]]"
+}
+
+# Takes 1 argument, file name.
+# Removes the BOM (byte order marker) from the specified file.
+function removebom {
+	local _FILE="${1}"
+	if [[ "$(file "${_FILE}")" == *UTF-8\ Unicode\ \(with\ BOM\)* ]]
+	then
+		echo "Removing UTF-8 BOM for ${_FILE}"
+		tail -c +4 "${_FILE}" > "/tmp/killbom" || { echo "Failed to tail to /tmp/killbom"; exit 1; }
+		mv "/tmp/killbom" "${_FILE}"
+	fi
 }
 
 # Takes 6 parameters: path to the pg_dump tool, port of the DB (host is assumed 
