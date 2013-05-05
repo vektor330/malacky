@@ -142,3 +142,12 @@ function db_download_dump {
 	    local _PG_DUMP="${3}"
 	    db_download "db_get_dump" "${_ENV}" "${_FILE}" "${_PG_DUMP}"
 }
+
+# Checks if the argument is a valid environment name, as described in the 
+# environment config file.
+function is_environment {
+	local _ENV="${1}"
+	# TODO DIR needs to be a parameter, too
+	cat "${DIR}/environments.conf" | grep -v "#" | cut -d "." -f 1 | sort | uniq | grep "." | grep -q "${_ENV}"
+	echo ${?}
+}

@@ -11,23 +11,38 @@ source "${DIR}/utils.sh"
 function main {
 	if [[ "${#}" != "2" ]]
 	then
-		echo "2 parameters expected: environment diff.sql"
+		echo "2 parameters expected: {environment|dump.sql} diff.sql"
 		exit 1
 	fi
-	
-	ENV="${1}"
-	DIFF="${2}"
 	
 	# TODO move somehow to config
 	WORK="${DIR}/work"
 	mkdir -p "${WORK}"
 	
-	DUMP="${WORK}/${ENV}-dump.sql"
-	
-	# get the full DB image from the environment
-	db_download_dump "${ENV}" "${DUMP}" "${PG_DUMP}"
-	remove_bom "${DUMP}"
-	sed -i ".bak" "/CREATE SCHEMA/d" "${DUMP}"
+	# set up parameters - we either get an environment and have to dump...
+	if [[ `is_environment "${1}"` == "0" ]]
+	then
+		ENV="${1}"
+		
+		echoerr "Will dump environment ${ENV}."
+		
+		DUMP="${WORK}/${ENV}-dump.sql"
+		
+		# get the full DB image from the environment
+		db_download_dump "${ENV}" "${DUMP}" "${PG_DUMP}"
+		remove_bom "${DUMP}"
+		sed -i ".bak" "/CREATE SCHEMA/d" "${DUMP}"
+	else
+		# ... or we get the dump itself
+		ENV="unknown"
+		DUMP="${1}"
+		
+		echoerr "Will use the existing dump ${DUMP}."		
+		
+		remove_bom "${DUMP}"
+	fi
+
+	DIFF="${2}"
 	remove_bom "${DIFF}"
 	
 	FULL_LOG="${WORK}/${ENV}-full.log"
