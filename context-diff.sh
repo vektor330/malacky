@@ -4,8 +4,9 @@
 # full path to this script
 DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source "${DIR}/config.sh"
-source "${DIR}/utils.sh"
+source "${DIR}/conf/config.sh"
+source "${DIR}/utils/utils.sh"
+source "${DIR}/utils/db-utils.sh"
 
 # Downloads the context.xml from the specified environment and saves it to the specified file.
 function getcontext {

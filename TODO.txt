@@ -5,15 +5,16 @@ Features:
   - then just grep "INSERT INTO \"C_" (or whatever the prefix in config.sh is)
     and use it as the status of master tables
 - try-upgrade: improve error reporting
+- db-diff: if there is no change, say something
 - Postgres control script
 
-Refactoring: 
+Refactoring:
+- rename scripts to noun-verb.sh
 - move getting $DIR to a common location
-- create config.sh.example
-- move utils.sh to a subfolder, move config.sh and environments.conf* to conf/
 - config.sh might want to discover the locations of those commands on its own
-- split utils.sh into DB and rest
 - harden everything
   - if the argument should be a file, check it really exists and can be read
+  - if the argument should be an environment, check it is defined
+  - if there are 2 environment arguments, make sure they are different
   - anyone opening a SSH channel must make sure it's closed on (exceptional) exit
   - before running pg_dump or psql, touch the port to see someone is listening

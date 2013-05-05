@@ -5,8 +5,9 @@
 # full path to this script
 DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source "${DIR}/config.sh"
-source "${DIR}/utils.sh"
+source "${DIR}/conf/config.sh"
+source "${DIR}/utils/utils.sh"
+source "${DIR}/utils/db-utils.sh"
 
 function main {
 	if [[ "${#}" != "2" ]]
@@ -23,10 +24,9 @@ function main {
 	if [[ `is_environment "${1}"` == "0" ]]
 	then
 		ENV="${1}"
-		
-		echoerr "Will dump environment ${ENV}."
-		
 		DUMP="${WORK}/${ENV}-dump.sql"
+		
+		echoerr "Will dump environment ${ENV} and save it to ${DUMP}."
 		
 		# get the full DB image from the environment
 		db_download_dump "${ENV}" "${DUMP}" "${PG_DUMP}"

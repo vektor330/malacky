@@ -1,0 +1,3 @@
+PG_DUMP="/path/to/pg_dump"
+PSQL="/path/to/psql"
+

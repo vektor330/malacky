@@ -6,8 +6,9 @@
 # full path to this script
 DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source "${DIR}/config.sh"
-source "${DIR}/utils.sh"
+source "${DIR}/conf/config.sh"
+source "${DIR}/utils/utils.sh"
+source "${DIR}/utils/db-utils.sh"
 
 function main {
 	if [[ "${#}" != "2" ]]
