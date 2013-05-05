@@ -1,9 +1,15 @@
 Features:
+- master table diff: 
+  - DB diff could download the full dumps
+    - perhaps APGdiff works on a full dump, too?
+  - then just grep "INSERT INTO \"C_" (or whatever the prefix in config.sh is)
+    and use it as the status of master tables
 - try-upgrade: improve error reporting
 - Postgres control script
 
 Refactoring: 
 - move getting $DIR to a common location
+- create config.sh.example
 - move utils.sh to a subfolder, move config.sh and environments.conf* to conf/
 - config.sh might want to discover the locations of those commands on its own
 - split utils.sh into DB and rest
