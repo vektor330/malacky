@@ -7,6 +7,7 @@ Features:
 - try-upgrade: improve error reporting
 - db-diff: if there is no change, say something
 - Postgres control script
+- cleanup script - just deletes work/
 
 Refactoring:
 - rename scripts to noun-verb.sh
@@ -18,3 +19,4 @@ Refactoring:
   - if there are 2 environment arguments, make sure they are different
   - anyone opening a SSH channel must make sure it's closed on (exceptional) exit
   - before running pg_dump or psql, touch the port to see someone is listening
+  - if we write to work/, make sure it exists first
