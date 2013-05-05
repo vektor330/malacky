@@ -7,14 +7,19 @@ function getparam {
 	cat "${DIR}/environments.conf" | grep "${_ENV}.${_KEY}" | cut -d "=" -f 2 | tr -d "[[:space:]]"
 }
 
+# The same as echo, but writes on the standard error.
+function echoerr {
+	echo "${@}" 1>&2
+}
+
 # Takes 1 argument, file name.
 # Removes the BOM (byte order marker) from the specified file.
 function remove_bom {
 	local _FILE="${1}"
 	if [[ "$(file "${_FILE}")" == *UTF-8\ Unicode\ \(with\ BOM\)* ]]
 	then
-		echo "Removing UTF-8 BOM for ${_FILE}"
-		tail -c +4 "${_FILE}" > "/tmp/killbom" || { echo "Failed to tail to /tmp/killbom"; exit 1; }
+		echoerr "Removing UTF-8 BOM for ${_FILE}"
+		tail -c +4 "${_FILE}" > "/tmp/killbom" || { echoerr "Failed to tail to /tmp/killbom"; exit 1; }
 		mv "/tmp/killbom" "${_FILE}"
 	fi
 }
@@ -94,29 +99,29 @@ function db_download {
 	if [[ "${REMOTE}" == "false" ]]
 	then
 		# get schema directly
-		echo -n "Dumping local DB..."
+		echoerr -n "Dumping local DB..."
     	    
 		"${_COMMAND}" "${_PG_DUMP}" "${DB_PORT}" "${DB_USER}" "${DB_DATABASE}" "${DB_SCHEMA}" "${_FILE}"
     	    
-		echo "done."
+		echoerr "done."
 	else
 		# open SSH tunnel
-		echo -n "Opening SSH tunnel..."
+		echoerr -n "Opening SSH tunnel..."
 		ssh -fnTN -L ${LOCAL_PORT}:localhost:${DB_PORT} ${USER}@${HOST} &
 		sleep 3
-		echo "done."
+		echoerr "done."
     	    
-		echo -n "Dumping remote DB..."
+		echoerr -n "Dumping remote DB..."
     	    
 		"${_COMMAND}" "${_PG_DUMP}" "${LOCAL_PORT}" "${DB_USER}" "${DB_DATABASE}" "${DB_SCHEMA}" "${_FILE}"
     	    
-		echo "done."
+		echoerr "done."
 	    
-		echo -n "Closing tunnel..."
+		echoerr -n "Closing tunnel..."
 		# close SSH tunnel
 		PID=$(pgrep -f "${LOCAL_PORT}:localhost:${DB_PORT}")
 		kill "${PID}"
-		echo "done."
+		echoerr "done."
 	fi
 }
 

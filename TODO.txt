@@ -1,6 +1,13 @@
+Features:
 - try-upgrade:
   - refactor getting the full dump into a different file - usually, we want to 
     get the dump once and tune/try diff.sql many times
   - improve error reporting
+- anyone opening a SSH channel must make sure it's closed on (exceptional) exit
+- before running pg_dump or psql, touch the port to see someone is listening
 - Postgres control script
-- db-diff: all the talking apart from the diff itself must go into stderr
+
+Refactoring: 
+- move getting $DIR to a common location
+- move utils.sh to a subfolder, move config.sh and environments.conf* to conf/
+- config.sh might want to discover the locations of those commands on its own
