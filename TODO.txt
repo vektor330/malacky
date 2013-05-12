@@ -8,6 +8,11 @@ Features:
 - db-diff: if there is no change, say something
 - Postgres control script
 - cleanup script - just deletes work/
+- script to actually apply the SQL patch to a remote DB
+- Script parameters: 
+  - Autocomplete environments
+  - Currently we have script.sh env other... how about script.sh other env?
+    Makes a bit more sense, it's like verb what where...
 
 Refactoring:
 - rename scripts to noun-verb.sh
