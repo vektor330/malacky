@@ -2,7 +2,7 @@
 # to be localhost - remote hosts have to be SSH tunnelled), database user name, 
 # database name and schema and finally file name.
 # Connects to the database and downloads its schema into the specified file.
-function db_get_schema {
+function __db_get_schema {
 	local _PG_DUMP="${1}"
 	local _PORT="${2}"
 	local _USER="${3}"
@@ -31,7 +31,7 @@ function db_get_schema {
 # to be localhost - remote hosts have to be SSH tunnelled), database user name, 
 # database name and schema and finally file name.
 # Connects to the database and dumps it into the specified file.
-function db_get_dump {
+function __db_get_dump {
 	local _PG_DUMP="${1}"
 	local _PORT="${2}"
 	local _USER="${3}"
@@ -55,7 +55,7 @@ function db_get_dump {
 	    	--schema "${_SCHEMA}" "${_DATABASE}"
 }
 
-function db_download {
+function __db_download {
 	local _COMMAND="${1}"
 	local _ENV="${2}"
 	local _FILE="${3}"
@@ -105,7 +105,7 @@ function db_download_schema {
 	    local _ENV="${1}"
 	    local _FILE="${2}"
 	    local _PG_DUMP="${3}"
-	    db_download "db_get_schema" "${_ENV}" "${_FILE}" "${_PG_DUMP}"
+	    __db_download "__db_get_schema" "${_ENV}" "${_FILE}" "${_PG_DUMP}"
 }
 
 # Takes 3 parameters: environment, file name and pg_dump path.
@@ -114,5 +114,5 @@ function db_download_dump {
 	    local _ENV="${1}"
 	    local _FILE="${2}"
 	    local _PG_DUMP="${3}"
-	    db_download "db_get_dump" "${_ENV}" "${_FILE}" "${_PG_DUMP}"
+	    __db_download "__db_get_dump" "${_ENV}" "${_FILE}" "${_PG_DUMP}"
 }

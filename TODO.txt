@@ -1,4 +1,5 @@
 Features:
+- try-upgrade: add \set ON_ERROR_STOP as the first line of the diff.sql
 - master table diff: 
   - DB diff could download the full dumps
     - perhaps APGdiff works on a full dump, too?

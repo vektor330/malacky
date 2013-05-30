@@ -40,6 +40,7 @@ function main {
 		echoerr "Will use the existing dump ${DUMP}."		
 		
 		remove_bom "${DUMP}"
+		sed -i ".bak" "/CREATE SCHEMA/d" "${DUMP}"
 	fi
 
 	DIFF="${2}"
