@@ -32,7 +32,7 @@ function main {
 	DB_DIFF="${WORK}/migrate-diff.sql"
 	
 	# step 1 - dump the source DB
-	db_download_schema "${ENV_SRC}" "${SRC_DUMP}" "${PG_DUMP}"
+	db_download_dump "${ENV_SRC}" "${SRC_DUMP}" "${PG_DUMP}"
 	
 	# step 2 - create the DB diff
 	"${DIR}/db-diff.sh" "${ENV_SRC}" "${ENV_TGT}" > "${DB_DIFF}"

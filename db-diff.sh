@@ -38,6 +38,7 @@ function main {
     	    exit 1
     fi
     
+    echo "\set ON_ERROR_STOP"
     java -jar "${DIFF}" "${OLD_SQL}" "${NEW_SQL}"
 }
 
