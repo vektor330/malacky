@@ -26,27 +26,30 @@ DB_SCHEMA="${9}"
 DB_IMAGE="${10}"
 
 # step 1 - SCP data from source to target
-echo "Running step 1: SCP data from source to target."
 SRC_TMP=`ssh "${SRC}" "mktemp -d"`
 DEST_TMP=`mktemp -d`
+echo "Running step 1:"
+echo "    Creating the source data dump (${SRC_DATA} to ${SRC_TMP})."
 ssh -t "${SRC}" "sudo cp -R '${SRC_DATA}' '${SRC_TMP}'; sudo chown -R '${USER}' '${SRC_TMP}'"
-scp -r "${SRC}":"${SRC_TMP}" "${DEST_TMP}"
+echo "    SCP'ing data from source (${SRC_DATA} currently living in ${SRC_TMP}) to target (${DEST_TMP})."
+scp -r "${SRC}":"${SRC_TMP}/*" "${DEST_TMP}"
+echo "    Getting rid of the source temp."
 ssh "${SRC}" "rm -rf '${SRC_TMP}'"
 
 # step 2 - stop server
 echo "Running step 2: stopping the server."
-/etc/init.d/tomcat6 stop
+# TODO matej Enable /etc/init.d/tomcat6 stop
 
 # step 2.5 - check the old backup does not exist
 TGT_DATA_OLD="${TGT_DATA}-old"
 if [[ -d "${TGT_DATA_OLD}" ]]
 then
-	echo "Data backup folder already exists - exiting."
+	echo "Data backup folder (${TGT_DATA_OLD}) already exists - exiting."
 	exit 1
 fi
 
 # step 3 - backup old data
-echo "Running step 3: backing up the old data."
+echo "Running step 3: backing up the old data: ${TGT_DATA} to ${TGT_DATA_OLD}."
 mv "${TGT_DATA}" "${TGT_DATA_OLD}"
 
 # step 3.5 - check the old DB does not exist
@@ -55,17 +58,17 @@ sudo -u postgres psql -l | grep "${DB_BACKUP}" > /dev/null
 
 if [[ "${?}" == "0" ]]
 then
-	echo "DB Backup already exists - exiting."
+	echo "DB backup ($DB_BACKUP) already exists - exiting."
 	exit 1
 fi
 
 # step 4 - backup old DB (rename it to a different name)
-echo "Running step 4: backing up the old DB."
-sudo -u postgres psql --single-transaction -c "ALTER DATABASE ${DB} RENAME TO ${DB_BACKUP}"
+echo "Running step 4: backing up the old DB: ${DB} to ${DB_BACKUP}."
+# TODO matej Test & enable sudo -u postgres psql --single-transaction -c "ALTER DATABASE ${DB} RENAME TO ${DB_BACKUP}"
 
 # step 5 - move the new resources to their place
-echo "Running step 5: moving the new data to their place."
-mv "${DEST_TMP}" "${TGT_DATA}"
+echo "Running step 5: moving the new data to their place: ${DEST_TMP} to ${TGT_DATA}."
+mv "${DEST_TMP}"/* "${TGT_DATA}"
 
 # step 5.5 - make sure the resources have correct owner, group and permissions
 echo "Running step 5.5: setting up correct permissions."
@@ -84,11 +87,12 @@ chmod 770 "${TGT_DATA}/upload"
 chmod g+s "${TGT_DATA}/upload"
 
 # step 6 - create the DB from the image
-echo "Running step 6: creating the DB from the image."
-sudo -u postgres psql --single-transaction -c "CREATE DATABASE ${DB}"
-sudo -u postgres psql -d "${DB}" --single-transaction -c "CREATE SCHEMA ${DB_SCHEMA}"
-sudo -u postgres psql -d "${DB}" --single-transaction -e -f "${DB_IMAGE}" > /dev/null
+echo "Running step 6: creating the DB $DB from the image (${DB_IMAGE})."
+# TODO matej Enable sudo -u postgres psql --single-transaction -c "CREATE DATABASE ${DB}"
+# TODO matej Enable sudo -u postgres psql -d "${DB}" --single-transaction -c "CREATE SCHEMA ${DB_SCHEMA}"
+# TODO matej Enable sudo -u postgres psql -d "${DB}" --single-transaction -e -f "${DB_IMAGE}" > /dev/null
 
 # step 7 - run server
 echo "Running step 7: starting the server."
-/etc/init.d/tomcat6 start
+# TODO matej Enable /etc/init.d/tomcat6 start
+
