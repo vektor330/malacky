@@ -22,8 +22,8 @@ P_USER="${5}"
 P_GROUP="${6}"
 P_UPLOADERS="${7}"
 DB="${8}"
-DB_IMAGE="${9}"
-SCHEMA="${10}"
+DB_SCHEMA="${9}"
+DB_IMAGE="${10}"
 
 # step 1 - SCP data from source to target
 echo "Running step 1: SCP data from source to target."
@@ -86,7 +86,7 @@ chmod g+s "${TGT_DATA}/upload"
 # step 6 - create the DB from the image
 echo "Running step 6: creating the DB from the image."
 sudo -u postgres psql --single-transaction -c "CREATE DATABASE ${DB}"
-sudo -u postgres psql -d "${DB}" --single-transaction -c "CREATE SCHEMA ${SCHEMA}"
+sudo -u postgres psql -d "${DB}" --single-transaction -c "CREATE SCHEMA ${DB_SCHEMA}"
 sudo -u postgres psql -d "${DB}" --single-transaction -e -f "${DB_IMAGE}" > /dev/null
 
 # step 7 - run server
