@@ -1,4 +1,5 @@
 #!/bin/bash
+# This is the second step in the environment migration.
 # Patches the specified DB dump file with the specified DB diff file. The 
 # resulting dump is saved in the specified file.
 # Takes three arguments - DB dump, DB diff and the resulting dump file.

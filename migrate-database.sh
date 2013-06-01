@@ -1,5 +1,6 @@
 #!/bin/bash
-# Prepares the first step of the environment migration - prepares the database
+# This is the second step in the environment migration.
+# Prepares the database for the migration.
 # First it downloads the full image of the source DB.
 # Second it prepares the diff between the source and target DB schemas.
 # At this point the script finishes and waits for the user to check the diff.
