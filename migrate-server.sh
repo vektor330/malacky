@@ -29,7 +29,7 @@ function main {
 	
 	# push the DB dump to the target
 	TMP=`ssh "${TGT}" "mktemp -d"`
-	scp "${DB_DUMP}" "${TGT}":"${TMP}"
+	scp -C "${DB_DUMP}" "${TGT}":"${TMP}"
 	
 	SRC_USER=`getparam "${ENV_SRC}" "user"`
 	SRC_HOST=`getparam "${ENV_SRC}" "host"`
@@ -39,13 +39,12 @@ function main {
 	TGT_P_GROUP=`getparam "${ENV_TGT}" "permgroup"`
 	TGT_P_UPLOADERS=`getparam "${ENV_TGT}" "permuploaders"`
 	TGT_DB=`getparam "${ENV_TGT}" "dbdatabase"`
-	TGT_DB_SCHEMA=`getparam "${ENV_TGT}" "dbschema"`
 	
 	# push the script to the target
 	scp migrate-target-side.sh "${TGT}":"${TMP}"
 	
 	# run the script on the target
-	ssh -t "${TGT}" sudo "${TMP}/migrate-target-side.sh" "${SRC_USER}" "${SRC_HOST}" "${SRC_DATA}" "${TGT_DATA}" "${TGT_P_USER}" "${TGT_P_GROUP}" "${TGT_P_UPLOADERS}" "${TGT_DB}" "${TGT_DB_SCHEMA}" "${TMP}/${DB_DUMP_FILE}"
+	ssh -t "${TGT}" sudo "${TMP}/migrate-target-side.sh" "${SRC_USER}" "${SRC_HOST}" "${SRC_DATA}" "${TGT_DATA}" "${TGT_P_USER}" "${TGT_P_GROUP}" "${TGT_P_UPLOADERS}" "${TGT_DB}" "${TMP}/${DB_DUMP_FILE}"
 	
 	# cleanup temp on target
 	ssh "${TGT}" rm -rf "${TMP}"

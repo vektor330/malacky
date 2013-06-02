@@ -7,9 +7,9 @@ then
 	exit 1
 fi
 
-if [[ "${#}" != "10" ]]
+if [[ "${#}" != "9" ]]
 then
-	echo "10 parameters expected."
+	echo "9 parameters expected."
 	exit 1
 fi
 
@@ -22,8 +22,7 @@ P_USER="${5}"
 P_GROUP="${6}"
 P_UPLOADERS="${7}"
 DB="${8}"
-DB_SCHEMA="${9}"
-DB_IMAGE="${10}"
+DB_IMAGE="${9}"
 
 # step 1 - SCP data from source to target
 SRC_TMP=`ssh "${SRC}" "mktemp -d"`
@@ -38,7 +37,7 @@ ssh "${SRC}" "rm -rf '${SRC_TMP}'"
 
 # step 2 - stop server
 echo "Running step 2: stopping the server."
-# TODO matej Enable /etc/init.d/tomcat6 stop
+/etc/init.d/tomcat6 stop
 
 # step 2.5 - check the old backup does not exist
 TGT_DATA_OLD="${TGT_DATA}-old"
@@ -64,11 +63,12 @@ fi
 
 # step 4 - backup old DB (rename it to a different name)
 echo "Running step 4: backing up the old DB: ${DB} to ${DB_BACKUP}."
-# TODO matej Test & enable sudo -u postgres psql --single-transaction -c "ALTER DATABASE ${DB} RENAME TO ${DB_BACKUP}"
+sudo -u postgres psql --single-transaction -c "ALTER DATABASE ${DB} RENAME TO ${DB_BACKUP}"
 
 # step 5 - move the new resources to their place
 echo "Running step 5: moving the new data to their place: ${DEST_TMP} to ${TGT_DATA}."
 mv "${DEST_TMP}"/* "${TGT_DATA}"
+rm -rf "${DEST_TMP}"
 
 # step 5.5 - make sure the resources have correct owner, group and permissions
 echo "Running step 5.5: setting up correct permissions."
@@ -87,12 +87,15 @@ chmod 770 "${TGT_DATA}/upload"
 chmod g+s "${TGT_DATA}/upload"
 
 # step 6 - create the DB from the image
-echo "Running step 6: creating the DB $DB from the image (${DB_IMAGE})."
-# TODO matej Enable sudo -u postgres psql --single-transaction -c "CREATE DATABASE ${DB}"
-# TODO matej Enable sudo -u postgres psql -d "${DB}" --single-transaction -c "CREATE SCHEMA ${DB_SCHEMA}"
-# TODO matej Enable sudo -u postgres psql -d "${DB}" --single-transaction -e -f "${DB_IMAGE}" > /dev/null
+DB_DUMP=`mktemp`
+mv "${DB_IMAGE}" "${DB_DUMP}"
+chown postgres "${DB_DUMP}"
+echo "Running step 6: creating the DB $DB from the image (${DB_DUMP})."
+sudo -u postgres psql --single-transaction -c "CREATE DATABASE ${DB}"
+sudo -u postgres psql -d "${DB}" --single-transaction -e -f "${DB_DUMP}" > /dev/null
+rm "${DB_DUMP}"
 
 # step 7 - run server
 echo "Running step 7: starting the server."
-# TODO matej Enable /etc/init.d/tomcat6 start
+/etc/init.d/tomcat6 start
 

@@ -40,7 +40,7 @@ function main {
 	
 	echo "DB dump written to '${SRC_DUMP}.'"
 	echo "DB diff written to '${DB_DIFF}'."
-	echo "Please verify the diff (try-upgrade) and continute with the next step of the migration."
+	echo "Please verify the diff (try-upgrade) and continute with the next step of the migration (migrate-patch-database)."
 }
 
 main "${@}"

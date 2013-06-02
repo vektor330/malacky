@@ -4,6 +4,7 @@ function getparam {
 	# TODO DIR needs to be set as argument too!
 	local _ENV="${1}"
 	local _KEY="${2}"
+	# TODO this grep has SERIOUS problems with prefix-ness!
 	cat "${DIR}/conf/environments.conf" | grep "${_ENV}.${_KEY}" | cut -d "=" -f 2 | tr -d "[[:space:]]"
 }
 

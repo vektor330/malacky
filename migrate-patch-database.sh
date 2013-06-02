@@ -78,10 +78,6 @@ function main {
 	    	--schema "${SCHEMA}" "${DB}"
 	    	
 	echo "done."
-	
-	echo -n "Bzipping the dump..."
-	bzip2 -9f "${OUT_DUMP}"
-	echo "done."
 }
 
 main "${@}"
