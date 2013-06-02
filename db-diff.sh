@@ -2,6 +2,8 @@
 # Diffs the DB schema of the 2 specified (old, new) environments. The result is
 # written to the stdout.
 
+# TODO matej Rename to db-schema-diff
+
 # full path to this script
 DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
