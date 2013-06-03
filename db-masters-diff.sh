@@ -37,8 +37,8 @@ function main {
 		exit 1
 	fi
 	
-	cat "${OLD_SQL}" | grep 'INSERT INTO "C_' > "${OLD_SQL}.masters"
-	cat "${NEW_SQL}" | grep 'INSERT INTO "C_' > "${NEW_SQL}.masters"
+	cat "${OLD_SQL}" | grep "INSERT INTO \"${MASTER_TABLE_PREFIX}" > "${OLD_SQL}.masters"
+	cat "${NEW_SQL}" | grep "INSERT INTO \"${MASTER_TABLE_PREFIX}" > "${NEW_SQL}.masters"
 	
 	diff "${OLD_SQL}.masters" "${NEW_SQL}.masters"
 }

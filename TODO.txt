@@ -1,9 +1,6 @@
 Features:
-- master table diff: 
-  - DB diff could download the full dumps
-    - perhaps APGdiff works on a full dump, too?
-  - then just grep "INSERT INTO \"C_" (or whatever the prefix in config.sh is)
-    and use it as the status of master tables
+- check if APGdiff works on full dump. If yes, then use the schema portion for 
+  schema diff and C_ for master tables.
 - try-upgrade: improve error reporting
 - db-diff: if there is no change, say something
 - Postgres control script

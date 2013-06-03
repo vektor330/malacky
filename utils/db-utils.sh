@@ -17,7 +17,6 @@ function __db_get_schema {
 	    	--no-password  \
 	    	--format plain \
 	    	--schema-only \
-	    	--no-owner \
 	    	--create \
 	    	--inserts \
 	    	--no-privileges \
@@ -45,7 +44,6 @@ function __db_get_dump {
 	    	--username "${_USER}" \
 	    	--no-password  \
 	    	--format plain \
-	    	--no-owner \
 	    	--create \
 	    	--inserts \
 	    	--no-privileges \
