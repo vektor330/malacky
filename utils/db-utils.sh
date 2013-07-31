@@ -21,7 +21,6 @@ function __db_get_schema {
 	    	--inserts \
 	    	--no-privileges \
 	    	--no-tablespaces \
-	    	--no-unlogged-table-data \
 	    	--file "${_FILE}" \
 	    	--schema "${_SCHEMA}" "${_DATABASE}"
 }
@@ -48,7 +47,6 @@ function __db_get_dump {
 	    	--inserts \
 	    	--no-privileges \
 	    	--no-tablespaces \
-	    	--no-unlogged-table-data \
 	    	--file "${_FILE}" \
 	    	--schema "${_SCHEMA}" "${_DATABASE}"
 }
