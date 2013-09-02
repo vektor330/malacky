@@ -1,3 +1,4 @@
 PG_DUMP="/path/to/pg_dump"
 PSQL="/path/to/psql"
 MASTER_TABLE_PREFIX="ENUM_"
+EXCLUDE_TABLE="myschema.not_this_table"

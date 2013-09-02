@@ -28,8 +28,8 @@ function main {
 	OLD_SQL="${WORK}/${ENV1}-dump.sql"
 	NEW_SQL="${WORK}/${ENV2}-dump.sql"
 	
-	db_download_dump "${ENV1}" "${OLD_SQL}" "${PG_DUMP}"
-	db_download_dump "${ENV2}" "${NEW_SQL}" "${PG_DUMP}"
+	db_download_masters "${ENV1}" "${OLD_SQL}" "${PG_DUMP}"
+	db_download_masters "${ENV2}" "${NEW_SQL}" "${PG_DUMP}"
 	
 	if [[ ! -f "${OLD_SQL}" || ! -f "${NEW_SQL}" ]]
 	then

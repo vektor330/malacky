@@ -47,6 +47,34 @@ function __db_get_dump {
 	    	--inserts \
 	    	--no-privileges \
 	    	--no-tablespaces \
+	    	--exclude-table "${EXCLUDE_TABLE}" \
+	    	--file "${_FILE}" \
+	    	--schema "${_SCHEMA}" "${_DATABASE}"
+}
+
+# Takes 6 parameters: path to the pg_dump tool, port of the DB (host is assumed 
+# to be localhost - remote hosts have to be SSH tunnelled), database user name, 
+# database name and schema and finally file name.
+# Connects to the database and dumps it into the specified file.
+function __db_get_masters {
+	local _PG_DUMP="${1}"
+	local _PORT="${2}"
+	local _USER="${3}"
+	local _DATABASE="${4}"
+	local _SCHEMA="${5}"
+	local _FILE="${6}"
+	
+	"${_PG_DUMP}" \
+	    	--host localhost \
+	    	--port "${_PORT}" \
+	    	--username "${_USER}" \
+	    	--no-password  \
+	    	--format plain \
+	    	--create \
+	    	--inserts \
+	    	--no-privileges \
+	    	--no-tablespaces \
+	    	--table "${_SCHEMA}.\"${MASTER_TABLE_PREFIX}\"*" \
 	    	--file "${_FILE}" \
 	    	--schema "${_SCHEMA}" "${_DATABASE}"
 }
@@ -111,4 +139,13 @@ function db_download_dump {
 	    local _FILE="${2}"
 	    local _PG_DUMP="${3}"
 	    __db_download "__db_get_dump" "${_ENV}" "${_FILE}" "${_PG_DUMP}"
+}
+
+# Takes 3 parameters: environment, file name and pg_dump path.
+# Saves the DB dump of the specified environment to the specified file.
+function db_download_masters {
+	    local _ENV="${1}"
+	    local _FILE="${2}"
+	    local _PG_DUMP="${3}"
+	    __db_download "__db_get_masters" "${_ENV}" "${_FILE}" "${_PG_DUMP}"
 }
