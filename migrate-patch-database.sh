@@ -73,7 +73,6 @@ function main {
 	    	--inserts \
 	    	--no-privileges \
 	    	--no-tablespaces \
-	    	--no-unlogged-table-data \
 	    	--file "${OUT_DUMP}" \
 	    	--schema "${SCHEMA}" "${DB}"
 	    	

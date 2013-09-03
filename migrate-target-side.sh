@@ -24,6 +24,24 @@ P_UPLOADERS="${7}"
 DB="${8}"
 DB_IMAGE="${9}"
 
+# step 0.1 - check the old backup does not exist
+TGT_DATA_OLD="${TGT_DATA}-old"
+if [[ -d "${TGT_DATA_OLD}" ]]
+then
+	echo "Data backup folder (${TGT_DATA_OLD}) already exists - exiting."
+	exit 1
+fi
+
+# step 0.2 - check the old DB does not exist
+DB_BACKUP="${DB}backup"
+sudo -u postgres psql -l | grep "${DB_BACKUP}" > /dev/null
+
+if [[ "${?}" == "0" ]]
+then
+	echo "DB backup ($DB_BACKUP) already exists - exiting."
+	exit 1
+fi
+
 # step 1 - SCP data from source to target
 SRC_TMP=`ssh "${SRC}" "mktemp -d"`
 DEST_TMP=`mktemp -d`
@@ -39,27 +57,9 @@ ssh "${SRC}" "rm -rf '${SRC_TMP}'"
 echo "Running step 2: stopping the server."
 /etc/init.d/tomcat6 stop
 
-# step 2.5 - check the old backup does not exist
-TGT_DATA_OLD="${TGT_DATA}-old"
-if [[ -d "${TGT_DATA_OLD}" ]]
-then
-	echo "Data backup folder (${TGT_DATA_OLD}) already exists - exiting."
-	exit 1
-fi
-
 # step 3 - backup old data
 echo "Running step 3: backing up the old data: ${TGT_DATA} to ${TGT_DATA_OLD}."
 mv "${TGT_DATA}" "${TGT_DATA_OLD}"
-
-# step 3.5 - check the old DB does not exist
-DB_BACKUP="${DB}backup"
-sudo -u postgres psql -l | grep "${DB_BACKUP}" > /dev/null
-
-if [[ "${?}" == "0" ]]
-then
-	echo "DB backup ($DB_BACKUP) already exists - exiting."
-	exit 1
-fi
 
 # step 4 - backup old DB (rename it to a different name)
 echo "Running step 4: backing up the old DB: ${DB} to ${DB_BACKUP}."
