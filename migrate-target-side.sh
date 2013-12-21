@@ -7,9 +7,9 @@ then
 	exit 1
 fi
 
-if [[ "${#}" != "9" ]]
+if [[ "${#}" != "10" ]]
 then
-	echo "9 parameters expected."
+	echo "10 parameters expected."
 	exit 1
 fi
 
@@ -22,7 +22,8 @@ P_USER="${5}"
 P_GROUP="${6}"
 P_UPLOADERS="${7}"
 DB="${8}"
-DB_IMAGE="${9}"
+DB_OWNER="${9}"
+DB_IMAGE="${10}"
 
 # step 0.1 - check the old backup does not exist
 TGT_DATA_OLD="${TGT_DATA}-old"
@@ -91,7 +92,7 @@ DB_DUMP=`mktemp`
 mv "${DB_IMAGE}" "${DB_DUMP}"
 chown postgres "${DB_DUMP}"
 echo "Running step 6: creating the DB $DB from the image (${DB_DUMP})."
-sudo -u postgres psql --single-transaction -c "CREATE DATABASE ${DB}"
+sudo -u postgres psql --single-transaction -c "CREATE DATABASE ${DB} OWNER ${DB_OWNER}"
 sudo -u postgres psql -d "${DB}" --single-transaction -e -f "${DB_DUMP}" > /dev/null
 rm "${DB_DUMP}"
 
