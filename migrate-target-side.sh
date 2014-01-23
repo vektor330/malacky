@@ -97,6 +97,6 @@ sudo -u postgres psql -d "${DB}" --single-transaction -e -f "${DB_DUMP}" > /dev/
 rm "${DB_DUMP}"
 
 # step 7 - run server
-echo "Running step 7: starting the server."
-/etc/init.d/tomcat6 start
+echo "Running step 7: starting the server: NOPE."
+#/etc/init.d/tomcat6 start
 

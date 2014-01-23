@@ -12,15 +12,16 @@ source "${DIR}/utils/utils.sh"
 source "${DIR}/utils/db-utils.sh"
 
 function main {
-	if [[ "${#}" != "3" ]]
+	if [[ "${#}" != "4" ]]
 	then
-		echo "3 parameters (files) expected: dbdump dbdiff outputdump"
+		echo "4 parameters (env + 3 files) expected: originalenv dbdump dbdiff outputdump"
 		exit 1
 	fi
 	
-	DB_DUMP="${1}"
-	DB_DIFF="${2}"
-	OUT_DUMP="${3}"
+	ENV_ORIGINAL="${1}"
+	DB_DUMP="${2}"
+	DB_DIFF="${3}"
+	OUT_DUMP="${4}"
 	
 	remove_bom "${DB_DUMP}"
 	sed -i ".bak" "/CREATE SCHEMA/d" "${DB_DUMP}"
@@ -58,6 +59,28 @@ function main {
 	${PSQL} ${COMMON} -U ${USER} -e -f ${DB_DIFF} > /dev/null
 	
 	echo "done."
+	
+	# re-sync with the source
+	echo -n "Re-syncing with the source..."
+	
+	# TODO move somehow to config
+	WORK="${DIR}/work"
+	mkdir -p "${WORK}"
+	
+	RESYNC_DIFF="${WORK}/migrate-resync-diff.sql"
+	
+	# TODO "test" should be parametrized
+	"${DIR}/db-diff.sh" "test" "${ENV_ORIGINAL}" > "${RESYNC_DIFF}"
+	
+	echo "done."
+	
+	echo -n "Applying re-sync diff..."
+	
+	# try to apply the diff	
+	${PSQL} ${COMMON} -U ${USER} -e -f ${RESYNC_DIFF} > /dev/null
+	
+	echo "done."
+
 	
 	echo -n "Dumping the patched image..."
 	
