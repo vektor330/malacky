@@ -26,7 +26,7 @@ function main {
 		ENV="${1}"
 		DUMP="${WORK}/${ENV}-dump.sql"
 		
-		echoerr "Will dump environment ${ENV} and save it to ${DUMP}."
+		echoerr "Will dump environment ${ENV} and save it to \"${DUMP}\"."
 		
 		# get the full DB image from the environment
 		db_download_dump "${ENV}" "${DUMP}" "${PG_DUMP}"
@@ -37,7 +37,7 @@ function main {
 		ENV="unknown"
 		DUMP="${1}"
 		
-		echoerr "Will use the existing dump ${DUMP}."		
+		echoerr "Will use the existing dump \"${DUMP}\"."
 		
 		remove_bom "${DUMP}"
 		sed -i ".bak" "/CREATE SCHEMA/d" "${DUMP}"
@@ -58,17 +58,27 @@ function main {
 	
 	COMMON="-h ${HOST} -p ${PORT} -d ${DB} --no-password --single-transaction"
 	
+	echoerr "Will use the local test DB \"${DB}\", schema \"${SCHEMA}\"."
+	
 	# delete local test schema
 	${PSQL} ${COMMON} -U ${USER_ADMIN} -c "DROP SCHEMA IF EXISTS ${SCHEMA} CASCADE" &> /dev/null
+	
+	echoerr "Local schema cleaned."
 
 	# create local test schema
 	${PSQL} ${COMMON} -U ${USER_ADMIN} -c "CREATE SCHEMA ${SCHEMA} AUTHORIZATION ${USER}" &> /dev/null
+	
+	echoerr "Local schema re-created."
 
 	# fill local test schema with data
 	${PSQL} ${COMMON} -U ${USER} -e -f ${DUMP} > ${FULL_LOG}
+	
+	echoerr "Dump applied."
 
 	# try to apply the diff	
 	${PSQL} ${COMMON} -U ${USER} -e -f ${DIFF} > ${DIFF_LOG}
+	
+	echoerr "Finished applying the diff."
 	
 	# TODO report success / failure
 }

@@ -38,6 +38,13 @@ function main {
 	# step 2 - create the DB diff
 	"${DIR}/db-diff.sh" "${ENV_SRC}" "${ENV_TGT}" > "${DB_DIFF}"
 	
+	# step 3 - append the patch to the DB diff
+	echo "" >> "${DB_DIFF}"
+	echo "-- *** patch.sql inserted below this line ***" >> "${DB_DIFF}"
+	echo "" >> "${DB_DIFF}"
+	
+	cat "${DIR}/conf/patch.sql" >> "${DB_DIFF}"
+	
 	echo "DB dump written to '${SRC_DUMP}.'"
 	echo "DB diff written to '${DB_DIFF}'."
 	echo "Please verify the diff (try-upgrade) and continute with the next step of the migration (migrate-patch-database)."

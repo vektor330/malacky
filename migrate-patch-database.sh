@@ -35,9 +35,13 @@ function main {
 	SCHEMA=`getparam "localhost" "dbschema"`
 	
 	COMMON="-h ${HOST} -p ${PORT} -d ${DB} --no-password --single-transaction"
+
+	echo -n "Flushing temp DB..."
 	
 	# delete local test schema
 	${PSQL} ${COMMON} -U ${USER_ADMIN} -c "DROP SCHEMA IF EXISTS ${SCHEMA} CASCADE" &> /dev/null
+	
+	echo "done."
 
 	echo -n "Creating DB..."
 	
@@ -52,16 +56,9 @@ function main {
 	${PSQL} ${COMMON} -U ${USER} -e -f ${DB_DUMP} &> /dev/null
 	
 	echo "done."
-
-	echo -n "Applying diff..."
-	
-	# try to apply the diff	
-	${PSQL} ${COMMON} -U ${USER} -e -f ${DB_DIFF} > /dev/null
-	
-	echo "done."
 	
 	# re-sync with the source
-	echo -n "Re-syncing with the source..."
+	echo "Re-syncing with the source..."
 	
 	# TODO move somehow to config
 	WORK="${DIR}/work"
@@ -78,6 +75,13 @@ function main {
 	
 	# try to apply the diff	
 	${PSQL} ${COMMON} -U ${USER} -e -f ${RESYNC_DIFF} > /dev/null
+	
+	echo "done."
+
+	echo -n "Applying diff..."
+	
+	# try to apply the diff	
+	${PSQL} ${COMMON} -U ${USER} -e -f ${DB_DIFF} > /dev/null
 	
 	echo "done."
 
