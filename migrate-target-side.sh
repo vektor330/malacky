@@ -92,8 +92,9 @@ DB_DUMP=`mktemp`
 mv "${DB_IMAGE}" "${DB_DUMP}"
 chown postgres "${DB_DUMP}"
 echo "Running step 6: creating the DB $DB from the image (${DB_DUMP})."
-sudo -u postgres psql --single-transaction -c "CREATE DATABASE ${DB} OWNER ${DB_OWNER}"
-sudo -u postgres psql -d "${DB}" --single-transaction -e -f "${DB_DUMP}" > /dev/null
+sudo -u postgres psql --single-transaction -c "CREATE DATABASE ${DB} OWNER ${DB_OWNER};"
+sudo -u postgres psql --single-transaction -d "${DB}" -c "CREATE LANGUAGE plpgsql;"
+sudo -u postgres psql --single-transaction -d "${DB}" -e -f "${DB_DUMP}" > /dev/null
 rm "${DB_DUMP}"
 
 # step 7 - run server

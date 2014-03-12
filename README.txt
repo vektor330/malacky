@@ -10,9 +10,11 @@ Database upgrade procedure:
 Environment migration procedure:
 
   1. Run migrate-database.sh to get the source DB dump and the raw DB diff file.
-     The contents of patch.sql is automatically appended to the end of the DB 
+     The contents of conf/patch.sql is automatically appended to the end of the DB 
      diff file.
   2. Run try-upgrade.sh and tune the DB diff file.
   3. Run migrate-patch-database.sh with the tuned diff file.
-  4. Run migrate-server.sh to finish the migration.
+  4. Run migrate-server.sh to finish the migration. Make sure the backup DB and 
+     resource folder are deleted. Make sure not clients are connected to the DB
+     (for example by restarting the DB server).
 
