@@ -14,7 +14,7 @@ Environment migration procedure:
      diff file.
   2. Run try-upgrade.sh and tune the DB diff file.
   3. Run migrate-patch-database.sh with the tuned diff file.
-  4. Run migrate-server.sh to finish the migration. Make sure the backup DB and 
-     resource folder are deleted. Make sure not clients are connected to the DB
-     (for example by restarting the DB server).
+  4. Run migrate-server.sh to finish the migration. Make sure the backup DB
+     is deleted. Make sure not clients are connected to the DB (for example 
+     by restarting the DB server).
 
