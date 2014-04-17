@@ -71,12 +71,12 @@ function main {
 	echoerr "Local schema re-created."
 
 	# fill local test schema with data
-	${PSQL} ${COMMON} -U ${USER} -e -f ${DUMP} > ${FULL_LOG}
+	${PSQL} ${COMMON} -U ${USER} -e -f "${DUMP}" > "${FULL_LOG}"
 	
 	echoerr "Dump applied."
 
 	# try to apply the diff	
-	${PSQL} ${COMMON} -U ${USER} -e -f ${DIFF} > ${DIFF_LOG}
+	${PSQL} ${COMMON} -U ${USER} -e -f "${DIFF}" > "${DIFF_LOG}"
 	
 	echoerr "Finished applying the diff."
 	
