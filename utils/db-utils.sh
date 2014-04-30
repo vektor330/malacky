@@ -37,6 +37,8 @@ function __db_get_dump {
 	local _SCHEMA="${5}"
 	local _FILE="${6}"
 	
+	EXCLUDED=`for i in $(echo ${EXCLUDE_TABLE} | tr "," "\n"); do echo -n " --exclude-table $i"; done;`
+	
 	"${_PG_DUMP}" \
 	    	--host localhost \
 	    	--port "${_PORT}" \
@@ -47,8 +49,7 @@ function __db_get_dump {
 	    	--inserts \
 	    	--no-privileges \
 	    	--no-tablespaces \
-	    	--exclude-table "${EXCLUDE_TABLE}" \
-	    	--file "${_FILE}" \
+	    	${EXCLUDED} --file "${_FILE}" \
 	    	--schema "${_SCHEMA}" "${_DATABASE}"
 }
 
