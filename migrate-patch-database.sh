@@ -102,6 +102,8 @@ function main {
 	    	--schema "${SCHEMA}" "${DB}"
 	    	
 	echo "done."
+	
+	echo "Please continue with the next step of the migration (migrate-server)."
 }
 
 main "${@}"

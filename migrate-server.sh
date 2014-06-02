@@ -12,6 +12,7 @@ function main {
 	if [[ "${#}" != "3" ]]
 	then
 		echo "3 parameters expected: source target dbdump"
+		echo "Make sure the backup DB is deleted. Make sure not clients are connected to the DB (for example by restarting the DB server)."
 		exit 1
 	fi
 	
