@@ -5,6 +5,7 @@ function getparam {
 	local _ENV="${1}"
 	local _KEY="${2}"
 	# TODO this grep has SERIOUS problems with prefix-ness!
+	# should probably be grep "^${_ENV}\.${_KEY}$"
 	cat "${DIR}/conf/environments.conf" | grep "${_ENV}.${_KEY}" | cut -d "=" -f 2 | tr -d "[[:space:]]"
 }
 

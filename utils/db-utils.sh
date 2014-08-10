@@ -86,10 +86,10 @@ function __db_download {
 	local _FILE="${3}"
 	local _PG_DUMP="${4}"
 
-	local HOST=`getparam "${_ENV}" "host"`
+	local DB_HOST=`getparam "${_ENV}" "dbhost"`
 	local DB_PORT=`getparam "${_ENV}" "dbport"`
 	local LOCAL_PORT=`getparam "${_ENV}" "localport"`
-	local USER=`getparam "${_ENV}" "user"`
+	local DB_SSH_USER=`getparam "${_ENV}" "dbsshuser"`
 	local DB_USER=`getparam "${_ENV}" "dbuser"`
 	local DB_DATABASE=`getparam "${_ENV}" "dbdatabase"`
 	local DB_SCHEMA=`getparam "${_ENV}" "dbschema"`
@@ -106,7 +106,7 @@ function __db_download {
 	else
 		# open SSH tunnel
 		echoerr -n "Opening SSH tunnel..."
-		ssh -fnTN -L ${LOCAL_PORT}:localhost:${DB_PORT} ${USER}@${HOST} &
+		ssh -fnTN -L ${LOCAL_PORT}:localhost:${DB_PORT} ${DB_SSH_USER}@${DB_HOST} &
 		sleep 3
 		echoerr "done."
     	    

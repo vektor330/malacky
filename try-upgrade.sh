@@ -49,14 +49,14 @@ function main {
 	FULL_LOG="${WORK}/${ENV}-full.log"
 	DIFF_LOG="${WORK}/${ENV}-diff.log"
 	
-	HOST=`getparam "localhost" "host"`
+	DBHOST=`getparam "localhost" "dbhost"`
 	PORT=`getparam "localhost" "dbport"`
 	USER=`getparam "localhost" "dbuser"`
 	USER_ADMIN=`getparam "localhost" "admin"`
 	DB=`getparam "localhost" "dbtestdatabase"`
 	SCHEMA=`getparam "localhost" "dbschema"`
 	
-	COMMON="-h ${HOST} -p ${PORT} -d ${DB} --no-password --single-transaction"
+	COMMON="-h ${DBHOST} -p ${PORT} -d ${DB} --no-password --single-transaction"
 	
 	echoerr "Will use the local test DB \"${DB}\", schema \"${SCHEMA}\"."
 	
