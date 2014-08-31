@@ -25,14 +25,14 @@ DB_OWNER="${9}"
 DB_IMAGE="${10}"
 
 # step 0 - check the old DB does not exist
-DB_BACKUP="${DB}backup"
-sudo -u postgres psql -l | grep "${DB_BACKUP}" > /dev/null
+#DB_BACKUP="${DB}backup"
+#sudo -u postgres psql -l | grep "${DB_BACKUP}" > /dev/null
 
-if [[ "${?}" == "0" ]]
-then
-	echo "DB backup ($DB_BACKUP) already exists - exiting."
-	exit 1
-fi
+#if [[ "${?}" == "0" ]]
+#then
+#	echo "DB backup ($DB_BACKUP) already exists - exiting."
+#	exit 1
+#fi
 
 # step 1 - stop server
 echo "Running step 1: stopping the server."
@@ -43,8 +43,8 @@ echo "Running step 2: rsync'ing data from source (${SRC_DATA}) to target (${TGT_
 rsync -azv --delete "${HOST}":"${SRC_DATA}"/* "${TGT_DATA}"
 
 # step 3 - backup old DB (rename it to a different name)
-echo "Running step 3: backing up the old DB: ${DB} to ${DB_BACKUP}."
-sudo -u postgres psql --single-transaction -c "ALTER DATABASE ${DB} RENAME TO ${DB_BACKUP}"
+#echo "Running step 3: backing up the old DB: ${DB} to ${DB_BACKUP}."
+#sudo -u postgres psql --single-transaction -c "ALTER DATABASE ${DB} RENAME TO ${DB_BACKUP}"
 
 # step 4 - make sure the resources have correct owner, group and permissions
 echo "Running step 4: setting up correct permissions."
@@ -63,15 +63,15 @@ chmod 770 "${TGT_DATA}/upload"
 chmod g+s "${TGT_DATA}/upload"
 
 # step 5 - create the DB from the image
-DB_DUMP=`mktemp`
-mv "${DB_IMAGE}" "${DB_DUMP}"
-chown postgres "${DB_DUMP}"
-echo "Running step 5: creating the DB $DB from the image (${DB_DUMP})."
-sudo -u postgres psql --single-transaction -c "CREATE DATABASE ${DB} OWNER ${DB_OWNER};"
-sudo -u postgres psql --single-transaction -d "${DB}" -c "CREATE LANGUAGE plpgsql;"
-echo "applying the image..."
-sudo -u postgres psql --single-transaction -d "${DB}" -e -f "${DB_DUMP}" > /dev/null
-rm "${DB_DUMP}"
+#DB_DUMP=`mktemp`
+#mv "${DB_IMAGE}" "${DB_DUMP}"
+#chown postgres "${DB_DUMP}"
+echo "Running step 5: creating the DB $DB from the image (${DB_DUMP}): NOPE."
+#sudo -u postgres psql --single-transaction -c "CREATE DATABASE ${DB} OWNER ${DB_OWNER};"
+#sudo -u postgres psql --single-transaction -d "${DB}" -c "CREATE LANGUAGE plpgsql;"
+#echo "applying the image..."
+#sudo -u postgres psql --single-transaction -d "${DB}" -e -f "${DB_DUMP}" > /dev/null
+#rm "${DB_DUMP}"
 
 # step 6 - run server
 echo "Running step 6: starting the server: NOPE."

@@ -107,7 +107,7 @@ function __db_download {
 		# open SSH tunnel
 		echoerr -n "Opening SSH tunnel..."
 		ssh -fnTN -L ${LOCAL_PORT}:localhost:${DB_PORT} ${DB_SSH_USER}@${DB_HOST} &
-		sleep 3
+		sleep 5
 		echoerr "done."
     	    
 		echoerr -n "Dumping remote DB..."

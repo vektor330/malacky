@@ -9,10 +9,9 @@ source "${DIR}/utils/utils.sh"
 source "${DIR}/utils/db-utils.sh"
 
 function main {
-	if [[ "${#}" != "3" ]]
+	if [[ "${#}" != "2" ]]
 	then
-		echo "3 parameters expected: source target dbdump"
-		echo "Make sure the backup DB is deleted. Make sure not clients are connected to the DB (for example by restarting the DB server)."
+		echo "2 parameters expected: source target"
 		exit 1
 	fi
 	
@@ -21,8 +20,8 @@ function main {
 	
 	# TODO check the environment specifications were correct
 	
-	DB_DUMP="${3}"
-	DB_DUMP_FILE=`basename "${DB_DUMP}"`
+	#DB_DUMP="${3}"
+	#DB_DUMP_FILE=`basename "${DB_DUMP}"`
 	
 	TGT_USER=`getparam "${ENV_TGT}" "user"`
 	TGT_HOST=`getparam "${ENV_TGT}" "host"`
@@ -30,7 +29,7 @@ function main {
 	
 	# push the DB dump to the target
 	TMP=`ssh "${TGT}" "mktemp -d"`
-	scp -C "${DB_DUMP}" "${TGT}":"${TMP}"
+	#scp -C "${DB_DUMP}" "${TGT}":"${TMP}"
 	
 	SRC_USER=`getparam "${ENV_SRC}" "user"`
 	SRC_HOST=`getparam "${ENV_SRC}" "host"`
