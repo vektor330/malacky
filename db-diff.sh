@@ -26,7 +26,7 @@ function main {
     # TODO move somehow to config
     WORK="${DIR}/work"
     mkdir -p "${WORK}"
-    DIFF="${DIR}/apgdiff/apgdiff-2.3.jar"
+    DIFF="${DIR}/apgdiff/apgdiff-2.4.jar"
 
     OLD_SQL="${WORK}/${ENV1}-schema.sql"
     NEW_SQL="${WORK}/${ENV2}-schema.sql"
@@ -40,7 +40,6 @@ function main {
     	    exit 1
     fi
     
-    echo "\set ON_ERROR_STOP"
     java -jar "${DIFF}" "${OLD_SQL}" "${NEW_SQL}"
 }
 
